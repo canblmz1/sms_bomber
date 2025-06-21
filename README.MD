@@ -61,8 +61,8 @@ MIT Lisansı
 ---
 
 <div align="center">
-  <img src="https://img.shields.io/github/stars/canblmz1/sms-bomber?style=social">
-  <img src="https://img.shields.io/github/forks/canblmz1/sms-bomber?style=social">
+  <img src="https://img.shields.io/github/stars/canblmz1/sms_bomber?style=social">
+  <img src="https://img.shields.io/github/forks/canblmz1/sms_bomber?style=social">
   <br>
   <b>🚫 Sorumluluk Reddi: Yasal olmayan kullanım tamamen kullanıcının sorumluluğundadır.</b>
 </div>
