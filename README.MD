@@ -15,8 +15,8 @@
 
 ```bash
 # 1. Projeyi klonla
-git clone https://github.com/yourusername/sms-bomber.git
-cd sms-bomber
+git clone https://github.com/canblmz1/sms_bomber.git
+cd sms_bomber
 
 # 2. Gerekli paketleri yükle
 pip install -r requirements.txt
