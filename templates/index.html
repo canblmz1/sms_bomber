@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>SMS Bomber (Eğitim Amaçlı)</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1>SMS Bomber</h1>
+    <form method="post" id="sms-form">
+        <label>Telefon Numarası:</label>
+        <input type="text" name="phone" required><br>
+        <label>Mesaj:</label>
+        <input type="text" name="message" required><br>
+        <label>Kaç SMS Gönderilsin?:</label>
+        <input type="number" name="count" value="1" min="1" required><br>
+        <button type="submit">Başlat</button>
+    </form>
+    <p class="status">{{ status }}</p>
+    <div id="result-panel" style="display:none;">
+        <h2>Gönderim Durumu</h2>
+        <canvas id="myChart" width="200" height="200"></canvas>
+        <table>
+            <thead>
+                <tr><th>#</th><th>Durum</th></tr>
+            </thead>
+            <tbody id="statusTable"></tbody>
+        </table>
+    </div>
+    <script>
+    let chart, chartData = [0, 0];
+
+    function updateStatus() {
+        fetch('/status')
+            .then(r => r.json())
+            .then(data => {
+                // Eğer hiç sms gönderimi yoksa paneli gösterme
+                if(data.total > 0) {
+                    document.getElementById("result-panel").style.display = "";
+                }
+                document.getElementById('statusTable').innerHTML =
+                    data.log.map(l => `<tr><td>${l.no}</td><td>${l.status}</td></tr>`).join('');
+                chartData[0] = data.sent;
+                chartData[1] = data.failed;
+                if(chart) {
+                    chart.data.datasets[0].data = chartData;
+                    chart.update();
+                }
+            });
+    }
+    window.onload = function() {
+        const ctx = document.getElementById('myChart').getContext('2d');
+        chart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Başarılı', 'Başarısız'],
+                datasets: [{
+                    data: chartData,
+                    backgroundColor: ['#66bb6a','#ef5350']
+                }]
+            }
+        });
+        setInterval(updateStatus, 1000);
+
+        // Form gönderildikten sonra sonucu ekrana getir
+        document.getElementById("sms-form").onsubmit = function() {
+            document.getElementById("result-panel").style.display = "";
+            setTimeout(updateStatus, 1000); // Gönderim hemen başlamazsa 1 sn sonra güncelle
+        };
+    }
+    </script>
+</body>
+</html>
